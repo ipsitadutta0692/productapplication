@@ -1,6 +1,7 @@
 package co.ipsita.product.app.controllers;
 
 
+import co.ipsita.product.app.domain.PostResponse;
 import co.ipsita.product.app.domain.Product;
 import co.ipsita.product.app.domain.ProductDto;
 import co.ipsita.product.app.factory.ResponseFactory;
@@ -39,9 +40,10 @@ public ResponseEntity<Product> getProductById(@PathVariable long id){
             description ="You can fetch All Products Available"
     )
     @RequestMapping(value = "/products",method = RequestMethod.GET)
-    public List<Product> getProductAll(){
+    public PostResponse getProductAll(@RequestParam(value = "pageNo",defaultValue = "0",required = false) int pageNo,
+                                      @RequestParam(value="pageSize",defaultValue = "10",required = false) int pageSize){
 
-        return service.getAllProducts();
+        return service.getAllProducts(  pageNo, pageSize);
     }
 
 

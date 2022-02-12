@@ -1,8 +1,12 @@
 package co.ipsita.product.app.service;
 
+import co.ipsita.product.app.domain.PostResponse;
 import co.ipsita.product.app.domain.Product;
 import co.ipsita.product.app.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.ValidationException;
@@ -26,9 +30,19 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        List<Product> listOfProduct = productRepository.findAll();
-         return listOfProduct;
+    public PostResponse getAllProducts( int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        Page<Product> listOfProduct = productRepository.findAll(pageable);
+        List<Product> productList= listOfProduct.getContent();
+
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(productList);
+        postResponse.setPageNo(listOfProduct.getNumber());
+        postResponse.setPageSize(listOfProduct.getSize());
+        postResponse.setTotalElements(listOfProduct.getSize());
+        postResponse.setLast(listOfProduct.isLast());
+
+         return postResponse;
     }
 
     @Override
