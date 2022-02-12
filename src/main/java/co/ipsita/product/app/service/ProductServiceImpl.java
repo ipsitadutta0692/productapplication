@@ -1,7 +1,6 @@
 package co.ipsita.product.app.service;
 
-import co.ipsita.product.app.domain.PostResponse;
-import co.ipsita.product.app.domain.Product;
+import co.ipsita.product.app.domain.*;
 import co.ipsita.product.app.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,6 +56,13 @@ public class ProductServiceImpl implements IProductService {
         throw new ValidationException("id","this Id Already Exist");
         }
         return productRepository.save(product);
+    }
+
+    @Override
+    public List<Product> searchProduct(SearchCriteria criteria) {
+        ProductQuery  productQuery = new ProductQuery(criteria);
+        List<Product> product = productRepository.findAll(productQuery.toSpecification());
+        return product;
     }
 
     private boolean doesIdExist(long id){

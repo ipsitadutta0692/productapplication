@@ -4,12 +4,14 @@ package co.ipsita.product.app.controllers;
 import co.ipsita.product.app.domain.PostResponse;
 import co.ipsita.product.app.domain.Product;
 import co.ipsita.product.app.domain.ProductDto;
+import co.ipsita.product.app.domain.SearchCriteria;
 import co.ipsita.product.app.factory.ResponseFactory;
 import co.ipsita.product.app.service.IProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.apache.catalina.connector.ResponseFacade;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.bind.ValidationException;
@@ -48,6 +50,7 @@ public ResponseEntity<Product> getProductById(@PathVariable long id){
 
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Update Product",
             description ="You can Update Specific Product details"
@@ -68,6 +71,7 @@ public ResponseEntity<Product> getProductById(@PathVariable long id){
 
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Add Product",
             description ="You can Add New Product details"
@@ -75,11 +79,28 @@ public ResponseEntity<Product> getProductById(@PathVariable long id){
     @RequestMapping(value = "/products",method = RequestMethod.POST)
     public ResponseEntity addProduct(@RequestBody Product product) {
        try {
+
            Product response = service.addProduct(product);
            return ResponseFactory.createSuccessResponse(response);
        }catch (Exception e){
            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
        }
+    }
+
+
+
+
+    @Operation(
+            summary = "Search Product",
+            description ="You can Search New Product details based on key value : name , currency"
+    )
+    @RequestMapping(value = "/products/searchProduct",method = RequestMethod.POST)
+    public List<Product> searchProduct(@RequestBody SearchCriteria criteria) {
+
+
+           List< Product> response = service.searchProduct(criteria);
+            return response;
+
     }
 
 
