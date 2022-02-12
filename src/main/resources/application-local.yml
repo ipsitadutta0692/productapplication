@@ -1,0 +1,20 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: Product-application
+  datasource:
+    url: jdbc:postgresql://localhost:5432/product_details
+    username: postgres
+    password: Chandrani@13
+    driver-class-name: org.postgresql.Driver
+    platform: postgres
+    pool:
+      initial-connection: 2
+      max-connections: 5
+      max-conn-lifetime-in-seconds: 300
+      jpa:
+        hibernate:
+          ddl-auto: none
+      show-sql: true
