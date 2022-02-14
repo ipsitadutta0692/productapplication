@@ -11,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends PagingAndSortingRepository<Product,Long>, JpaSpecificationExecutor<Product> {
-    Product findProductById(Long id);
+    Product findProductByProductId(Long productId);
     List<Product> findAll();
 }

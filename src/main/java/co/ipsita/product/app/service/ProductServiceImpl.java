@@ -23,8 +23,8 @@ public class ProductServiceImpl implements IProductService {
 
 
     @Override
-    public Product findProductById(Long id) {
-        Product result = productRepository.findProductById(id);
+    public Product findProductById(Long productId) {
+        Product result = productRepository.findProductByProductId(productId);
         return result;
     }
 
@@ -45,15 +45,23 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Product updateProduct(Product product) {
-        return productRepository.save(product);
+    public Product updateProduct(Product product) throws ValidationException{
+
+
+        if(productRepository.existsById(product.getProductId())) {
+            return productRepository.save(product);
+        }else{
+            throw new ValidationException("ID Does not Exist","ID Does not Exist");
+        }
+
+
     }
 
     @Override
     public Product addProduct(Product product) throws ValidationException {
-        boolean checkIdExist = doesIdExist(product.getId());
+        boolean checkIdExist = doesIdExist(product.getProductId());
         if(checkIdExist){
-        throw new ValidationException("id","this Id Already Exist");
+        throw new ValidationException("Id Already Exist","Id Already Exist");
         }
         return productRepository.save(product);
     }
@@ -66,7 +74,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     private boolean doesIdExist(long id){
-        Product product = productRepository.findProductById(id);
+        Product product = productRepository.findProductByProductId(id);
         if(product!=null){
             return true;
         }else{

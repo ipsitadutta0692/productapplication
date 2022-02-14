@@ -10,7 +10,7 @@ import java.util.List;
 public interface IProductService {
     Product findProductById(Long id);
     PostResponse getAllProducts(int pageNo, int pageSize);
-    Product updateProduct(Product product);
+    Product updateProduct(Product product) throws ValidationException;
     Product addProduct(Product product) throws ValidationException;
     List<Product> searchProduct(SearchCriteria criteria);
 }
